@@ -101,8 +101,7 @@ if __name__ == '__main__':
     run()
 
 
-'''
-    # Play the converted file 
+''' # Play the converted file 
     os.system("start output.mp3")'''
 
 # >>> import platform

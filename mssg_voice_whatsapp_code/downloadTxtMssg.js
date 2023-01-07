@@ -156,4 +156,4 @@ for (let i = 0; i < allMssgContainer.length; i++) {
     });
     }
 */
-//TODO: Make the program so when clicked again, the logo is deleted, so it is only shown 1 time
+//TODO: Make the program so when clicked again, the logo is deleted, so it is only shown 1 times
