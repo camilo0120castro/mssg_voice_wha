@@ -31,8 +31,11 @@ function dwnldTxtFile(fileName, txtContent)
     document.body.removeChild(dwlndElement);
 }
 
-function saveTxtMssgContainer()
+function saveTxtMssgContainer(allMssgContainer)
 {
+    let txtMssgContainer = [];
+    let containerFlag = 0; //to save (loop through) the mssg container in an array
+
     // Check if the message container has a "span" element inside, if so, save the mssg container in an array
     for (let container of allMssgContainer)
     {
@@ -48,6 +51,7 @@ function saveTxtMssgContainer()
             containerFlag+=1; //containerFlag = containerFlag + 1;
         }
     }
+    return txtMssgContainer;
 }
 
 function dwnldMssgContainer(container)
@@ -59,7 +63,7 @@ function dwnldMssgContainer(container)
 }
 
 
-function dwnldIconMssgContainer()
+function dwnldIconMssgContainer(txtMssgContainer)
 {
     for (let container of txtMssgContainer)
     {
@@ -83,18 +87,49 @@ function dwnldIconMssgContainer()
     }
 }
 
+function obtainAllTxtMssg()
+{
+    //Gets all the containers with those classes and saves only the ones that have text in txtMssgContainer
+    let allMssgContainerMain = document.getElementsByClassName("selectable-text copyable-text");
+
+    let txtMssgContainerMain = saveTxtMssgContainer(allMssgContainerMain);
+    
+    //Includes a download icon/button in each mssg container with text. If it is clicked, the download starts.
+    dwnldIconMssgContainer(txtMssgContainerMain);
+}
+
+function saveMenuPosition()
+{
+    // Check which menu container is the "main" menu container (at the top-left with the profile photo and other buttons). If it is the main menu container, puts the program logo before the other buttons
+    for (let menuPosition of menuProgramPosition)
+    {    
+        let parentClassName = menuPosition.parentNode.classList;
+        
+        if (parentClassName == "_3yZPA")
+        {
+            //Create a img node
+            const dwnldIconImg = document.createElement("img");
+            dwnldIconImg.src = "https://i.imgur.com/VwKTBNh.png";
+            dwnldIconImg.style.height = "1.5rem";
+            dwnldIconImg.style.lineHeight = "normal";
+
+            // Append the download icon node to the main menu:
+            menuPosition.prepend(dwnldIconImg);
+            
+            //When the icon is clicked, it gets all the Text Messages that can be converted to voice notes
+            dwnldIconImg.addEventListener("click", obtainAllTxtMssg);
+        }
+    }
+}
+
 
 /* ********Main Code******** */
 
-//Gets all the containers with those classes and saves only the ones that have text in txtMssgContainer
-let allMssgContainer = document.getElementsByClassName("selectable-text copyable-text");
-let txtMssgContainer = [];
+//Gets all the possible containers (to put the program logo) with those classes
+let menuProgramPosition = document.getElementsByClassName("_1QVfy _3UaCz");
+saveMenuPosition();
 
-let containerFlag = 0; //to save (loop through) the mssg container in an array
-saveTxtMssgContainer();
 
-//Includes a download icon/button in each mssg container with text. If it is clicked, the download starts.
-dwnldIconMssgContainer();
 
 //TODO: Can the download icon be shown only when the mouse enters the message container?
 /*
@@ -121,3 +156,4 @@ for (let i = 0; i < allMssgContainer.length; i++) {
     });
     }
 */
+//TODO: Make the program so when clicked again, the logo is deleted, so it is only shown 1 time

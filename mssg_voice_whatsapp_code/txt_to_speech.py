@@ -32,7 +32,7 @@ def select_language():
         if prompted:
             message = "\nSelect the language you want to use, write only two (2) letters: "
         else:
-            message = "Write only two (2) letters: " # Only shown the first time
+            message = "\nWrite only two (2) letters: " # Only shown the first time
         
         lang_selected=input(message)
         
@@ -50,16 +50,38 @@ def select_language():
 
 
 def open_browser():
-    # Open the default browser and navigate to the specified website
-    url = "https://web.whatsapp.com"
-    subprocess.run(["cmd", "/c", "start", url])
+    # Ask the user if they want to open the website
+    response = input("Do you want to open Whatsapp Web in a new tab? (y/n): ")
+    if response.lower() == "y" or response.lower() == "yes":
+        # Open the default browser and navigate to the specified website
+        print("Opening Whatsapp Web in a new tab...")
+        url = "https://web.whatsapp.com"
+        subprocess.run(["cmd", "/c", "start", url])
+
+
+def show_exit_mssg():
+    input("\nPress <enter> to exit...")
 
 
 def run():
-    # Reads the last text file, replacing the linebreaks to normal spaces for more clarity
-    name_txt_file = glob.glob('../whaTxtMssg202*.txt',recursive=False)[-1]
-    txt_file = open(name_txt_file,"rt", encoding='UTF-8')
-    txt_mssg = txt_file.read().replace("\n", " ")
+    while True:
+        try:
+            # Reads the last text file, replacing the linebreaks to normal spaces for more clarity
+            name_txt_file = glob.glob('../whaTxtMssg20*.txt',recursive=False)[-1] # It searches the file in the previous folder using relative path
+            txt_file = open(name_txt_file,"rt", encoding='UTF-8')
+            txt_mssg = txt_file.read().replace("\n", " ")
+            break
+        except IndexError:
+            # Text file not found, ask the user if they want to try again
+            print("\nThe text file with the Whatsapp text message was not found. Please make sure you have downloaded a Whatsapp text message")
+            txt_file_not_found_response = input("Do you want to try again? (y/n): ")
+            if txt_file_not_found_response.lower() == "n" or txt_file_not_found_response.lower() == "no":
+                show_exit_mssg()
+                return
+            else:
+                continue
+
+    print("Text message found!")
 
     # Language we want to use 
     user_language= select_language()
@@ -70,8 +92,10 @@ def run():
     audio_file.save(name_audio_file)
     txt_file.close()
 
-    input(f"Audio file \"{name_audio_file}\" generated correctly.\nPress <enter> to exit...")
-    open_browser() # Opens the web browser to send the file
+    # It only shows the name of the file withouth the relative path
+    print(f"\nAudio file \"{name_audio_file[3::1]}\" generated correctly.")
+    open_browser() # Ask the user to open the web browser to send the file
+    show_exit_mssg()
 
 if __name__ == '__main__':
     run()
