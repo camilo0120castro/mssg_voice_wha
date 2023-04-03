@@ -32,7 +32,7 @@ With this tool you can type your message as text in Whatsapp Web (in a web brows
 - The program only converts the last `.txt` file generated. This means that you must download a text message and **inmediately** run the program to convert it to audio, and send it via Whatsapp web
 - The audio file generated must be manually sent to the contact you are chatting with
 
-## How does it works?
+## How does it work?
 
 First, download this GitHub repo, click the green button that says *code* and then click *Download Zip*.
 
