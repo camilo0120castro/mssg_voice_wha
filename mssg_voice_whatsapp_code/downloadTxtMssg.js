@@ -63,8 +63,29 @@ function dwnldMssgContainer(container)
 }
 
 
-function dwnldIconMssgContainer(txtMssgContainer)
+
+//Shows or hides the DownloadIcon
+function createDownloadIcon(container)
 {
+    // When the mouse pointer enters the container, the DownloadIcon (<a> element) is displayed
+    if (container.querySelector("a.MSSG_2_VOICE_ICON"))
+    {
+        container.querySelector("a.MSSG_2_VOICE_ICON").style.display = "inline";
+    }
+}
+
+function removeDownloadIcon(container)
+{
+    // When the mouse pointer is outside of the container, the DownloadIcon (<a> element) is hidden
+    if (container.querySelector("a.MSSG_2_VOICE_ICON"))
+    {
+        // container.removeChild(container.querySelector("a.MSSG_2_VOICE_ICON"));
+        container.querySelector("a.MSSG_2_VOICE_ICON").style.display = "none";
+    }
+}
+
+function dwnldIconMssgContainer(txtMssgContainer)
+{  
     for (let container of txtMssgContainer)
     {
         //Create a img node
@@ -74,6 +95,7 @@ function dwnldIconMssgContainer(txtMssgContainer)
 
         // Create an "a" node:
         let dwnldIcon = document.createElement("a");
+        dwnldIcon.classList.add("MSSG_2_VOICE_ICON");
         dwnldIcon.style.lineHeight = "normal";
         
         // Append the img node to the "a" node:
@@ -81,9 +103,25 @@ function dwnldIconMssgContainer(txtMssgContainer)
         
         // Append the download icon node to the message container:
         container.appendChild(dwnldIcon);
+
+        //Hides the download icon by default
+        dwnldIcon.style.display = "none";
         
         //When the icon is clicked it downloads the Text Message
         dwnldIcon.addEventListener("click", () => dwnldMssgContainer(container));
+
+
+        //Create an empty span node (whitespace) with a certain width at the right of the dwnldIcon
+        const span = document.createElement("span");
+        span.style.marginRight = "0.5rem";
+
+        // Append the span node to the message container:
+        container.appendChild(span);
+
+        /*When the mouse is over the container, the DownloadIcon is displayed
+        When the mouse is elsewhere, the DownloadIcon is hidden*/
+        container.setAttribute('onmouseover', 'createDownloadIcon(this)');
+        container.setAttribute('onmouseout', 'removeDownloadIcon(this)');
     }
 }
 
@@ -93,6 +131,7 @@ function obtainAllTxtMssg()
     let allMssgContainerMain = document.getElementsByClassName("selectable-text copyable-text");
 
     let txtMssgContainerMain = saveTxtMssgContainer(allMssgContainerMain);
+    console.log(txtMssgContainerMain);//FIXME:
     
     //Includes a download icon/button in each mssg container with text. If it is clicked, the download starts.
     dwnldIconMssgContainer(txtMssgContainerMain);
@@ -105,7 +144,7 @@ function saveMenuPosition()
     {    
         let parentClassName = menuPosition.parentNode.classList;
         
-        if (parentClassName == "_3yZPA")
+        if (parentClassName == "_604FD")
         {
             //Create a img node
             const dwnldIconImg = document.createElement("img");
@@ -126,34 +165,5 @@ function saveMenuPosition()
 /* ********Main Code******** */
 
 //Gets all the possible containers (to put the program logo) with those classes
-let menuProgramPosition = document.getElementsByClassName("_1QVfy _3UaCz");
+let menuProgramPosition = document.getElementsByClassName("_1sPvB _2XdMx");
 saveMenuPosition();
-
-
-
-//TODO: Can the download icon be shown only when the mouse enters the message container?
-/*
-for (let i = 0; i < allMssgContainer.length; i++) {
-    allMssgContainer[i].addEventListener("mouseenter", function() {
-        console.log("The mouse has entered the range of the div element!");
-        //Create a img node
-        const dwnldIconImg = document.createElement("img");
-        dwnldIconImg.src = "../mssg_voice_whatsapp_logos/Logo_final.png"; 
-        dwnldIconImg.style.height = "1rem"
-
-        // Create an "a" node:
-        let dwnldIcon = document.createElement("a");
-        dwnldIcon.style.lineHeight = "normal";
-        
-        // Append the img node to the "a" node:
-        dwnldIcon.appendChild(dwnldIconImg);
-        
-        // Append the download icon node to the message container:
-        allMssgContainer[i].appendChild(dwnldIcon);
-        
-        //When the icon is clicked it downloads the Text Message
-        dwnldIcon.addEventListener("click", () => dwnldMssgContainer(allMssgContainer[i]));
-    });
-    }
-*/
-//TODO: Make the program so when clicked again, the logo is deleted, so it is only shown 1 times
